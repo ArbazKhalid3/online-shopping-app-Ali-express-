@@ -1,15 +1,17 @@
 # online-shopping-app-Ali-express-
 I have developed a project using java implementing object oriented programming.
 
-package onlineshopping;
 
+package onlineshopping;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-
+import java.io.*;
 
 public class Onlineshopping {
 
+    private static final String FILE_NAME = "OnlineShoppingApp.txt";
+    
     public static void main(String[] args) {
          Scanner scan = new Scanner(System.in);
 
@@ -71,7 +73,193 @@ public class Onlineshopping {
 
         } while (true);
     }
-    
+     private static ArrayList<OnlineShoppingApp> readOnlineShoppingAppsFromFile(String fileName) {
+        ArrayList<OnlineShoppingApp> OnlineShoppingApps = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+           String name;
+           String price;
+           String product_id;
+           String color;
+
+
+            while ((product_id = reader.readLine()) != null) {
+                name = reader.readLine();
+                price  = reader.readLine();
+                color  = reader.readLine();
+                OnlineShoppingApps.add(new OnlineShoppingApp(name, price, color,product_id));
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading from file: " + e.getMessage());
+        }
+
+        return OnlineShoppingApps;
+    }
+
+     private static class OnlineShoppingApp {
+
+        public OnlineShoppingApp() {
+        }
+
+        private OnlineShoppingApp(String name, String price, String color, String product_id) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        private char[] getProduct_id() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        private char[] getName() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        private char[] getPrice() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        private char[] getColor() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        private void setProduct_id(String newproduct_id) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        private void setname(String newname) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        private void setprice(String newprice) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        private void setcolor(String newcolor) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        private void setName(String updatedname) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+    }
+ private static void saveOnlineShoppingAppsToFile(ArrayList<OnlineShoppingApp> OnlineShoppingApps, String fileName) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            for (OnlineShoppingApp OnlineShoppingApp : OnlineShoppingApps) {
+                writer.write(OnlineShoppingApp.getProduct_id());
+                writer.newLine();
+                writer.write(OnlineShoppingApp.getName());
+                writer.newLine();
+                writer.write(OnlineShoppingApp.getPrice());
+                writer.newLine();
+                writer.write(OnlineShoppingApp.getColor());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.err.println("Error writing to file: " + e.getMessage());
+        }
+    }
+ private static void updateOnlineShoppingApp(ArrayList<OnlineShoppingApp> OnlineShoppingApps, Scanner scanner) {
+        if (OnlineShoppingApps.isEmpty()) {
+            System.out.println("No data available to update.");
+            return;
+        }
+        System.out.print("Enter Product ID of the product to update: ");
+        String updateproduct_id = scanner.next();
+        OnlineShoppingApp OnlineShoppingAppToUpdate = null;
+        for (OnlineShoppingApp OnlineShoppingApp : OnlineShoppingApps) {
+            if (OnlineShoppingApp.getProduct_id().equals(updateproduct_id)) {
+                OnlineShoppingAppToUpdate = OnlineShoppingApp;
+                break;
+            }
+        }
+        if (OnlineShoppingAppToUpdate == null) {
+            System.out.println("product not found.");
+            return;
+        }
+        System.out.println("Update Menu:");
+        System.out.println("1. Update product ID");
+        System.out.println("2. Update  name");
+        System.out.println("3. Update price");
+        System.out.println("4. Update colour");
+        System.out.println("5. Update everything");
+        System.out.println("6. Go back");
+        System.out.print("Enter your choice: ");
+        int updateChoice = scanner.nextInt();
+        switch (updateChoice) {
+            case 1:
+                System.out.print("Enter new product ID: ");
+                String newproduct_id = scanner.next();
+                boolean isUniqueID = OnlineShoppingApps.stream().noneMatch(OnlineShoppingApp -> OnlineShoppingApp.getProduct_id().equals(newproduct_id));
+                if (isUniqueID) {
+                    OnlineShoppingAppToUpdate.setProduct_id(newproduct_id);
+                    saveOnlineShoppingAppsToFile(OnlineShoppingApps, FILE_NAME);
+                    System.out.println("Product ID updated successfully!");
+                } else {
+                    System.out.println("product ID must be unique. Update failed.");
+                }
+                break;
+            case 2:
+                System.out.print("Enter new  name: ");
+                String newname = scanner.next();
+                OnlineShoppingAppToUpdate.setname(newname);
+                saveOnlineShoppingAppsToFile(OnlineShoppingApps, FILE_NAME);
+                System.out.println(" name updated successfully!");
+                break;
+            case 3:
+                System.out.print("Enter new price: ");
+                String newprice = scanner.next();
+                OnlineShoppingAppToUpdate.setprice(newprice);
+                saveOnlineShoppingAppsToFile(OnlineShoppingApps, FILE_NAME);
+                System.out.println("Last price updated successfully!");
+                break;
+            case 4:
+                System.out.print("Enter new colour: ");
+                String newcolor = scanner.next();
+                OnlineShoppingAppToUpdate.setcolor(newcolor);
+                saveOnlineShoppingAppsToFile(OnlineShoppingApps, FILE_NAME);
+                System.out.println("Last colour updated successfully!");
+                break;
+            case 5:
+                System.out.print("Enter new product ID: ");
+                String updatedproduct_id = scanner.next();
+                boolean isUniqueUpdatedID = OnlineShoppingApps.stream().noneMatch(OnlineShoppingApp -> OnlineShoppingApp.getProduct_id().equals(updatedproduct_id));
+                if (isUniqueUpdatedID) {
+                    OnlineShoppingAppToUpdate.setProduct_id(updatedproduct_id);
+                    System.out.print("Enter new  name: ");
+                    String updatedname = scanner.next();
+                    OnlineShoppingAppToUpdate.setName(updatedname);
+                    System.out.print("Enter new price : ");
+                    String updatedprice = scanner.next();
+                    OnlineShoppingAppToUpdate.setprice(updatedprice);
+                    saveOnlineShoppingAppsToFile(OnlineShoppingApps, FILE_NAME);
+                    System.out.println("online shooping app data updated successfully!");
+                } else {
+                    System.out.println("Product ID must be unique. Update failed.");
+                }
+                break;
+            case 6:
+                System.out.println("Going back...");
+                break;
+            default:
+                System.out.println("Invalid choice. Please enter a number from 1 to 6.");
+        }
+    }
+private static void deleteOnlineShoppingApp(ArrayList<OnlineShoppingApp> OnlineShoppingApps, Scanner scanner) {
+        if (OnlineShoppingApps.isEmpty()) {
+            System.out.println("No online shopping apps data  available to delete.");
+            return;
+        }
+        System.out.print("Enter product ID of the student to delete: ");
+        String deleteproduct_id = scanner.next();
+        boolean removed = OnlineShoppingApps.removeIf(OnlineShoppingApp -> OnlineShoppingApp.getProduct_id().equals(deleteproduct_id));
+        if (removed) {
+            saveOnlineShoppingAppsToFile(OnlineShoppingApps, FILE_NAME);
+            System.out.println("online shopping app data deleted successfully!");
+        } else {
+            System.out.println("online shopping app data not found.");
+        }
+    }
+
+
 }
 class Product {
     private String name;
